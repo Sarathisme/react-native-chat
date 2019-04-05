@@ -7,20 +7,43 @@
  */
 
 import React, {Component} from 'react';
-import {StyleSheet, View, Animated, Easing} from 'react-native';
-import { GoogleSigninButton } from 'react-native-google-signin';
+import {StyleSheet, View, Animated, Easing, ToastAndroid} from 'react-native';
+import { GoogleSignin, GoogleSigninButton, statusCodes } from 'react-native-google-signin';
+import webClientId from './config';
 import logo from './assets/logo.png';
 
 type Props = {};
 export default class App extends Component<Props> {
 
-  signIn() {
+  signIn = async () => {
+    console.log(webClientId);
+    GoogleSignin.configure({
+      webClientId: webClientId, // client ID of type WEB for your server (needed to verify user ID and offline access)
+      offlineAccess: false, // if you want to access Google API on behalf of the user FROM YOUR SERVER
+    });
 
-  }
-
-  componentDidMount(): void {
-
-  }
+    try {
+      await GoogleSignin.hasPlayServices();
+      const userInfo = await GoogleSignin.signIn();
+      console.log(userInfo.user);
+      ToastAndroid.show("Successfully signed in!", ToastAndroid.SHORT);
+    } catch (error) {
+      console.log(error);
+      if (error.code === statusCodes.SIGN_IN_CANCELLED) {
+        // user cancelled the login flow
+        ToastAndroid.show("Sign In Cancelled!", ToastAndroid.SHORT);
+      } else if (error.code === statusCodes.IN_PROGRESS) {
+        // operation (f.e. sign in) is in progress already
+        ToastAndroid.show("Sign In in progress", ToastAndroid.SHORT);
+      } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
+        // play services not available or outdated
+        ToastAndroid.show("Play services not available", ToastAndroid.SHORT);
+      } else {
+        // some other error happened
+        ToastAndroid.show("Sign In failed! Error!", ToastAndroid.SHORT);
+      }
+    }
+  };
 
   render() {
     let spinValue = new Animated.Value(0);
