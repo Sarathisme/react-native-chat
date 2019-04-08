@@ -10,18 +10,13 @@ import React, {Component} from 'react';
 import {View, Animated, Easing} from 'react-native';
 import { GoogleSigninButton } from 'react-native-google-signin';
 
-import userReducer from '../reducers/userReducer';
-import { createStore } from 'redux';
+import store from '../reducers/store';
 import styles from '../stylesheets/HomeScreen';
 import logo from '../../assets/logo.png';
 
 import AuthController from '../controllers/AuthController';
 
 type Props = {};
-
-const store = createStore(
-    userReducer
-);
 
 export default class HomeScreen extends Component<Props> {
     signIn = async () => {
