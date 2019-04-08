@@ -12,7 +12,7 @@ import { GoogleSigninButton } from 'react-native-google-signin';
 
 import userReducer from '../reducers/userReducer';
 import { createStore } from 'redux';
-import styles from '../stylesheets/App';
+import styles from '../stylesheets/HomeScreen';
 import logo from '../../assets/logo.png';
 
 import AuthController from '../controllers/AuthController';
