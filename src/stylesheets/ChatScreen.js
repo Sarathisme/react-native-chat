@@ -2,8 +2,8 @@ import {StyleSheet} from "react-native";
 
 const ChatScreenStyles = StyleSheet.create({
     logo: {
-        width: 24,
-        height: 24,
+        width: 18,
+        height: 18,
         marginRight: 12
     },
 

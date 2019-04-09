@@ -10,7 +10,7 @@ import React, {Component} from 'react';
 import {View, Animated, Easing} from 'react-native';
 import { GoogleSigninButton } from 'react-native-google-signin';
 
-import store from '../reducers/store';
+import store from '../reducers/Store';
 import styles from '../stylesheets/HomeScreen';
 import logo from '../../assets/logo.png';
 

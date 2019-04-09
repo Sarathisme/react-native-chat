@@ -1,15 +1,14 @@
-function getDataItems(id) {
-    return {
-        'chats': [
+class ChatController {
+    static getDataItems() {
+        return [
             {
                 'name': 'Sarath Sattiraju'
             },
             {
-                'name': 'Avinash Vijaykumar'
-            },
-            {
-                'name': 'Prathyusha'
+                'name': 'Home Screen'
             }
         ]
     }
 }
+
+export default ChatController;
