@@ -1,5 +1,5 @@
 import {GoogleSignin, statusCodes} from "react-native-google-signin";
-import webClientId from "../../config";
+import webClientId from '../../config';
 import {ToastAndroid} from "react-native";
 
 class AuthController {
@@ -15,6 +15,7 @@ class AuthController {
             ToastAndroid.show("Successfully signed in!", ToastAndroid.SHORT);
             return userInfo.user;
         } catch (error) {
+            console.log("here!");
             console.log(error);
             if (error.code === statusCodes.SIGN_IN_CANCELLED) {
                 ToastAndroid.show("Sign In Cancelled!", ToastAndroid.SHORT);

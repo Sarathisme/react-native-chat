@@ -13,7 +13,8 @@ const ChatScreenStyles = StyleSheet.create({
     },
 
     main: {
-        margin: 16
+        marginTop: 24,
+        marginBottom: 24,
     }
 });
 
