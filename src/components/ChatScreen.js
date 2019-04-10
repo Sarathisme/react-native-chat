@@ -14,8 +14,11 @@ export default class ChatScreen extends Component {
 
         this.state = {
             'email': store.getState().user.email,
-            'id': store.getState().user.id
+            'id': store.getState().user.id,
+            'load': false
         };
+
+        store.subscribe(this.render);
     }
 
     async componentWillMount(): void {
@@ -27,6 +30,7 @@ export default class ChatScreen extends Component {
             console.log(e);
         }
         store.dispatch({type: 'FETCH_DATA_ITEMS', chats: chats});
+        this.setState({'load': true});
     }
 
     static navigationOptions = {
@@ -43,23 +47,18 @@ export default class ChatScreen extends Component {
     };
 
     render() {
-        if(store.getState().data.chats !== undefined) {
-            return (
-                <View style={styles.main}>
-                    <FlatList data={store.getState().data.chats}
-                              renderItem={(chat) => <User email={this.state.email}
-                                                          name={chat.item.name}
-                                                          photo={chat.item.photo}
-                                                          messages={chat.item.messages}
-                                                          user={this.state.id}/>
-                              }/>
-                </View>
-            );
-        } else {
-            return (
-                <View style={styles.main}/>
-            )
-        }
-
+        return <View style={styles.main}>
+            <FlatList data={store.getState().data.chats}
+                      renderItem={chat => <User email={this.state.email}
+                                                name={chat.item.name}
+                                                photo={chat.item.photo}
+                                                messages={chat.item.messages}
+                                                user={this.state.id}/>
+                      }
+                      keyExtractor={chat => {
+                          return chat.user_id;
+                      }}
+            />
+        </View>;
     }
 }
