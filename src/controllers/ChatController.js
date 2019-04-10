@@ -2,8 +2,9 @@ import {API_URL} from "../../config";
 
 class ChatController {
     static async getDataItems(id) {
+        let response;
         try {
-            const response = await fetch(`${API_URL}chat/get/users`, {
+            response = await fetch(`${API_URL}chat/get/users`, {
                 method: 'post',
                 headers: {
                     'Content-type': 'application/json',
@@ -14,11 +15,12 @@ class ChatController {
                     "id": id,
                 })
             });
-
-            return response.json();
         }catch(error) {
             console.log(error);
         }
+
+        const results = await response.json();
+        return results;
     }
 }
 
