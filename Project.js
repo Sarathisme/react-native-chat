@@ -2,10 +2,12 @@ import React from "react";
 import {createAppContainer, createStackNavigator} from "react-navigation";
 import HomeScreen from './src/components/HomeScreen';
 import ChatScreen from './src/components/ChatScreen';
+import Chat from './src/components/Chat';
 
 const Project= createStackNavigator({
     HomeScreen: {screen: HomeScreen, navigationOptions:{header: null}},
-    ChatScreen: {screen: ChatScreen, header: null},
+    ChatScreen: {screen: ChatScreen},
+    Chat: {screen: Chat}
 },{
     initialRouteName: 'HomeScreen'
 });

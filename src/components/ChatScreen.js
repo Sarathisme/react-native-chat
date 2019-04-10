@@ -14,19 +14,19 @@ export default class ChatScreen extends Component {
 
         this.state = {
             'email': store.getState().user.email,
-            'id': store.getState().user.id
+            'id': store.getState().user.id,
         };
+
+        store.subscribe(this.render);
     }
 
-    async componentWillMount(): void {
-        store.subscribe(this.render);
-        let chats;
+    async componentDidMount(): void {
         try {
-            chats = await ChatController.getDataItems(store.getState().user.id);
+            const response = await ChatController.getDataItems(this.state.id);
+            console.log(response);
         } catch (e) {
             console.log(e);
         }
-        store.dispatch({type: 'FETCH_DATA_ITEMS', chats: chats});
     }
 
     static navigationOptions = {
@@ -43,23 +43,18 @@ export default class ChatScreen extends Component {
     };
 
     render() {
-        if(store.getState().data.chats !== undefined) {
-            return (
-                <View style={styles.main}>
-                    <FlatList data={store.getState().data.chats}
-                              renderItem={(chat) => <User email={this.state.email}
-                                                          name={chat.item.name}
-                                                          photo={chat.item.photo}
-                                                          messages={chat.item.messages}
-                                                          user={this.state.id}/>
-                              }/>
-                </View>
-            );
-        } else {
-            return (
-                <View style={styles.main}/>
-            )
-        }
-
+        console.log("Here!");
+        return (
+            <View style={styles.main}>
+                <FlatList data={store.getState().data.chats}
+                          renderItem={(chat) => <User email={this.state.email}
+                                                      name={chat.item.name}
+                                                      photo={chat.item.photo}
+                                                      messages={chat.item.messages}
+                                                      user={this.state.id}
+                                                      navigation={this.props.navigation}/>
+                          }/>
+            </View>
+        );
     }
 }
