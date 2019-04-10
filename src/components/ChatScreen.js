@@ -53,7 +53,8 @@ export default class ChatScreen extends Component {
                                                 name={chat.item.name}
                                                 photo={chat.item.photo}
                                                 messages={chat.item.messages}
-                                                user={this.state.id}/>
+                                                user={this.state.id}
+                                                navigation={this.props.navigation}/>
                       }
                       keyExtractor={chat => {
                           return chat.user_id;
