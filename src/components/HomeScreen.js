@@ -7,7 +7,7 @@
  */
 
 import React, {Component} from 'react';
-import {View, Animated, Easing} from 'react-native';
+import {View, Animated, Easing, StatusBar} from 'react-native';
 import { GoogleSigninButton } from 'react-native-google-signin';
 
 import store from '../reducers/Store';
@@ -44,6 +44,7 @@ export default class HomeScreen extends Component<Props> {
 
         return (
             <View style={styles.container}>
+                <StatusBar backgroundColor="steelblue" barStyle="light-content" />
                 <View style={styles.logoContainer}>
                     <Animated.Image style={{
                         maxWidth: 200,

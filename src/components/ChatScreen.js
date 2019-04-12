@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {View, Text} from 'react-native';
+import {View, Text, StatusBar} from 'react-native';
 import {Image, TouchableWithoutFeedback, FlatList} from 'react-native';
 import User from './User';
 import search from '../../search.png';
@@ -34,6 +34,9 @@ export default class ChatScreen extends Component {
     }
 
     static navigationOptions = {
+        headerStyle: {
+          backgroundColor: 'steelblue'
+        },
         headerTitle: "Chat",
         headerRight:
             <View style={styles.container}>
@@ -48,6 +51,7 @@ export default class ChatScreen extends Component {
 
     render() {
         return <View style={styles.main}>
+            <StatusBar backgroundColor="steelblue" barStyle="light-content" />
             <FlatList data={store.getState().data.chats}
                       renderItem={chat => <User email={this.state.email}
                                                 name={chat.item.name}

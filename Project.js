@@ -7,7 +7,7 @@ import Conversation from "./src/components/Conversation";
 const Project= createStackNavigator({
     HomeScreen: {screen: HomeScreen, navigationOptions:{header: null}},
     ChatScreen: {screen: ChatScreen},
-    Conversation: {screen: Conversation}
+    Conversation: {screen: Conversation, navigationOptions: {header: null}}
 },{
     initialRouteName: 'HomeScreen'
 });
