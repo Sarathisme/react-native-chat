@@ -53,8 +53,7 @@ export default class ChatScreen extends Component {
         return <View style={styles.main}>
             <StatusBar backgroundColor="steelblue" barStyle="light-content" />
             <FlatList data={store.getState().data.chats}
-                      renderItem={chat => <User email={this.state.email}
-                                                name={chat.item.name}
+                      renderItem={chat => <User name={chat.item.name}
                                                 photo={chat.item.photo}
                                                 messages={chat.item.messages}
                                                 user={this.state.id}
