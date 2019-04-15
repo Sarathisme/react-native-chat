@@ -2,14 +2,13 @@ import React, {Component} from 'react';
 import {Text, View, Image, TouchableNativeFeedback, StatusBar} from "react-native";
 import styles from '../stylesheets/User';
 import {Badge} from "react-native-elements";
-import store from '../reducers/Store';
 
 export default class User extends Component<Props> {
 
     getMessagesCount(list, id) {
         let noOfMessages = 0;
         list.forEach(message => {
-            if(message.id === id) {
+            if(message.id !== id) {
                 noOfMessages++;
             }
         });
@@ -26,7 +25,7 @@ export default class User extends Component<Props> {
         return (
             <View>
                 <StatusBar backgroundColor="steelblue" barStyle="light-content" />
-                <TouchableNativeFeedback onPress={() => this.onPress(this.props.name, this.props.photo, this.props.user)}>
+                <TouchableNativeFeedback onPress={() => this.onPress(this.props.name, this.props.photo, this.props.id)}>
                     <View style={styles.container}>
                         <View style={styles.containerProfile}>
                             <Image style={styles.profile} source={{uri: this.props.photo}}/>

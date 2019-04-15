@@ -31,6 +31,7 @@ const ConversationStyles = StyleSheet.create({
 
     inputContainer: {
         flex: 1,
+        flexDirection: 'row',
         padding: 0,
         backgroundColor: '#eaeaea',
     },
@@ -40,9 +41,15 @@ const ConversationStyles = StyleSheet.create({
     },
 
     input: {
+        flex: 1,
         color: 'black',
         height: 300,
         textAlignVertical: 'top',
+    },
+
+    sendButton: {
+        alignItems: 'center',
+        textAlign:'center'
     },
 
     profile: {
@@ -62,8 +69,10 @@ const ConversationStyles = StyleSheet.create({
     email: {
         fontSize: 12,
         color: 'white',
-        textAlign: 'center'
-    }
+        textAlign: 'center',
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
 });
 
 export default ConversationStyles;

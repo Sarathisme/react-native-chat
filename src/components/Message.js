@@ -8,7 +8,7 @@ export default class Message extends Component<Props> {
     }
 
     render() {
-        const {chatName, chatPhoto, chatId, currentName, currentPhoto, currentId, chat} = this.props;
+        const {chatPhoto, chatId, currentPhoto, chat} = this.props;
         if(chat.id === chatId) {
             return (
                 <View style={styles.containerLeft}>

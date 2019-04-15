@@ -1,9 +1,10 @@
 import React, {Component} from 'react';
-import {Text, View, Image, StatusBar, TextInput, KeyboardAvoidingView, ScrollView, FlatList} from "react-native";
+import {Text, View, Image, StatusBar, TextInput, KeyboardAvoidingView, ScrollView, FlatList, Button} from "react-native";
 import Message from '../components/Message';
 import styles from '../stylesheets/Conversation';
 import {Header} from "react-native-elements";
 import store from '../reducers/Store';
+import ChatController from "../controllers/ChatController";
 
 export default class Conversation extends Component<Props> {
     constructor(props) {
@@ -13,12 +14,39 @@ export default class Conversation extends Component<Props> {
             messages: [],
             id: this.props.navigation.state.params.id,
             name: this.props.navigation.state.params.name,
-            photo: this.props.navigation.state.params.photo
+            photo: this.props.navigation.state.params.photo,
+            text: null
+        };
+
+        this.getMessages = this.getMessages.bind(this);
+        this.submit = this.submit.bind(this);
+    }
+
+    async submit() {
+        try {
+            const response = await ChatController.postMessage(this.props.navigation.state.params.id, store.getState().user.id, this.state.text);
+            console.log(response);
+        }catch (e) {
+            console.log(e);
+        }
+    }
+
+    async getMessages(current, chat) {
+        try {
+            const response = await ChatController.getMessages(current, chat);
+            this.setState({
+                messages: response.data
+            });
+        } catch (e) {
+            console.log(error);
         }
     }
 
     render() {
-        // TODO: Resolve the id problem
+        if(this.state.messages.length === 0) {
+            this.getMessages(this.props.navigation.state.params.id, store.getState().user.id);
+        }
+
         return (
             <View style={styles.container}>
                 <StatusBar backgroundColor="steelblue" barStyle="light-content" />
@@ -33,22 +61,21 @@ export default class Conversation extends Component<Props> {
 
                 <View style={styles.contentContainer}>
                     <View style={styles.messagesContainer}>
-                        <ScrollView style={styles.messagesList}>
-                            <FlatList data={store.getState().dummy}
+                        <ScrollView style={styles.messagesList} ref="scrollView"
+                                    onContentSizeChange={(width,height) => this.refs.scrollView.scrollTo({y:height})}>
+                            <FlatList data={this.state.messages}
                                       renderItem={chat => <Message chat={chat.item}
-                                                                   chatName={this.state.name}
                                                                    chatPhoto={this.state.photo}
                                                                    chatId={this.state.id}
-                                                                   currentName={store.getState().user.name}
-                                                                   currentPhoto={store.getState().user.photo}
-                                                                   currentId={store.getState().user.id}
-                                      />}
+                                                                   currentPhoto={store.getState().user.photo}/>
+                                      }
                             />
                         </ScrollView>
                     </View>
 
                     <KeyboardAvoidingView behavior="padding" style={styles.inputContainer}>
-                        <TextInput style={styles.input} multiline={true} underlineColorAndroid={'green'}/>
+                        <TextInput style={styles.input} multiline={true} placeholder="Type a message" onChangeText={(text) => this.setState({text: text})}/>
+                        <Button title="Send" onPress={this.submit} style={styles.sendButton}/>
                     </KeyboardAvoidingView>
                 </View>
             </View>

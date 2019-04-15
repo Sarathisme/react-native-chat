@@ -21,6 +21,54 @@ class ChatController {
 
         return await response.json();
     }
+
+    static async getMessages(current, chat) {
+        let response;
+        try {
+            response = await fetch(`${API_URL}chat/get/messages`, {
+                method: 'post',
+                headers: {
+                    'Content-type': 'application/json',
+                    'Access-Control-Allow-Origin': '*',
+                    'Access-Control-Allow-Headers': 'Content-type'
+                },
+                body: JSON.stringify({
+                    "interlocutor": chat,
+                    "id": current,
+                })
+            });
+        }catch(error) {
+            console.log(error);
+        }
+
+        return await response.json();
+    }
+
+    static async postMessage(current, chat, message) {
+        let response;
+        console.log(current, chat, message);
+        try {
+            response = await fetch(`${API_URL}chat/post/messages`, {
+                method: 'post',
+                headers: {
+                    'Content-type': 'application/json',
+                    'Access-Control-Allow-Origin': '*',
+                    'Access-Control-Allow-Headers': 'Content-type'
+                },
+                body: JSON.stringify({
+                    "interlocutor": current,
+                    "id": chat,
+                    "message": message
+                })
+            });
+
+            console.log(response);
+        }catch (e) {
+            console.log(e);
+        }
+
+        return await response.json();
+    }
 }
 
 export default ChatController;
