@@ -22,7 +22,7 @@ class ChatController {
         return await response.json();
     }
 
-    static async getMessages(current, chat) {
+    static async getMessages(chat, current) {
         let response;
         try {
             response = await fetch(`${API_URL}chat/get/messages`, {

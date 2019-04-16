@@ -4,6 +4,7 @@ import Message from '../components/Message';
 import styles from '../stylesheets/Conversation';
 import {Header} from "react-native-elements";
 import store from '../reducers/Store';
+import socket from '../socket/Socket';
 import ChatController from "../controllers/ChatController";
 
 export default class Conversation extends Component<Props> {
@@ -20,6 +21,21 @@ export default class Conversation extends Component<Props> {
 
         this.getMessages = this.getMessages.bind(this);
         this.submit = this.submit.bind(this);
+        this.subscribeToMessage = this.subscribeToMessage.bind(this);
+    }
+
+    subscribeToMessage() {
+        socket.on(store.getState().user.id, data => {
+           const messages = this.state.messages;
+           messages.push(data);
+           this.setState({
+               messages: messages
+           });
+        });
+    }
+
+    componentDidMount(): void {
+        this.subscribeToMessage();
     }
 
     async submit() {
@@ -36,6 +52,8 @@ export default class Conversation extends Component<Props> {
             this.setState({
                 'messages': messages
             });
+
+            socket.emit("chat", {"interlocutor": this.props.navigation.state.params.id, "message": messageObject});
 
             const response = await ChatController.postMessage(this.props.navigation.state.params.id, store.getState().user.id, messageObject);
 
