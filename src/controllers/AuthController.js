@@ -13,7 +13,6 @@ class AuthController {
             await GoogleSignin.hasPlayServices();
             const userInfo = await GoogleSignin.signIn();
             const response = await this.signInWithDatabase(userInfo);
-            console.log(response);
             if(response.status === 200) {
                 ToastAndroid.show("Successfully signed in!", ToastAndroid.SHORT);
                 return userInfo.user;

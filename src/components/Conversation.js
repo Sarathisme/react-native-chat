@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Text, View, Image, StatusBar, TextInput, KeyboardAvoidingView, ScrollView, FlatList, Button} from "react-native";
+import {Text, View, Image, StatusBar, TextInput, KeyboardAvoidingView, ScrollView, FlatList, Button, ToastAndroid} from "react-native";
 import Message from '../components/Message';
 import styles from '../stylesheets/Conversation';
 import {Header} from "react-native-elements";
@@ -24,16 +24,29 @@ export default class Conversation extends Component<Props> {
 
     async submit() {
         try {
-            const response = await ChatController.postMessage(this.props.navigation.state.params.id, store.getState().user.id, this.state.text);
-            console.log(response);
+            const messageObject = {
+                'id': store.getState().user.id,
+                'message': this.state.text,
+                'timestamp': Date.now().toString()
+            };
+
+            const messages = this.state.messages;
+            messages.push(messageObject);
+
+            this.setState({
+                'messages': messages
+            });
+
+            const response = await ChatController.postMessage(this.props.navigation.state.params.id, store.getState().user.id, messageObject);
+
         }catch (e) {
             console.log(e);
         }
     }
 
-    async getMessages(current, chat) {
+    async getMessages(chat, current) {
         try {
-            const response = await ChatController.getMessages(current, chat);
+            const response = await ChatController.getMessages(chat, current);
             this.setState({
                 messages: response.data
             });

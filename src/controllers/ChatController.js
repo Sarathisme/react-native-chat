@@ -44,9 +44,9 @@ class ChatController {
         return await response.json();
     }
 
-    static async postMessage(current, chat, message) {
+    static async postMessage(chat, current, message) {
         let response;
-        console.log(current, chat, message);
+
         try {
             response = await fetch(`${API_URL}chat/post/messages`, {
                 method: 'post',
@@ -61,8 +61,6 @@ class ChatController {
                     "message": message
                 })
             });
-
-            console.log(response);
         }catch (e) {
             console.log(e);
         }
