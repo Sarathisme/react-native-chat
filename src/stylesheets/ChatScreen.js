@@ -13,9 +13,15 @@ const ChatScreenStyles = StyleSheet.create({
     },
 
     main: {
+        flex: 1,
         marginTop: 4,
         marginBottom: 4,
-    }
+    },
+
+    title: {
+        color: 'white',
+        fontSize: 20
+    },
 });
 
 export default ChatScreenStyles;
