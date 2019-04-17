@@ -57,8 +57,6 @@ export default class Conversation extends Component<Props> {
                 'text': ''
             });
 
-            Keyboard.dismiss();
-
             socket.emit("chat", {"interlocutor": this.props.navigation.state.params.id, "message": messageObject});
             ChatController.postMessage(this.props.navigation.state.params.id, store.getState().user.id, messageObject);
         }catch (e) {
