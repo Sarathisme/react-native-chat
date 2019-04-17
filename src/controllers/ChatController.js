@@ -56,8 +56,8 @@ class ChatController {
                     'Access-Control-Allow-Headers': 'Content-type'
                 },
                 body: JSON.stringify({
-                    "interlocutor": current,
-                    "id": chat,
+                    "interlocutor": chat,
+                    "id": current,
                     "message": message
                 })
             });

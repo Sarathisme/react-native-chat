@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Text, View, Image, StatusBar, TextInput, KeyboardAvoidingView, ScrollView, FlatList, Button, ToastAndroid} from "react-native";
+import {Text, View, Image, StatusBar, TextInput, KeyboardAvoidingView, ScrollView, FlatList, Button, Keyboard} from "react-native";
 import Message from '../components/Message';
 import styles from '../stylesheets/Conversation';
 import {Header} from "react-native-elements";
@@ -16,7 +16,8 @@ export default class Conversation extends Component<Props> {
             id: this.props.navigation.state.params.id,
             name: this.props.navigation.state.params.name,
             photo: this.props.navigation.state.params.photo,
-            text: null
+            text: null,
+            load: false
         };
 
         this.getMessages = this.getMessages.bind(this);
@@ -29,7 +30,8 @@ export default class Conversation extends Component<Props> {
            const messages = this.state.messages;
            messages.push(data);
            this.setState({
-               messages: messages
+               messages: messages,
+               load: !this.state.load
            });
         });
     }
@@ -50,13 +52,15 @@ export default class Conversation extends Component<Props> {
             messages.push(messageObject);
 
             this.setState({
-                'messages': messages
+                'messages': messages,
+                'load': !this.state.load,
+                'text': ''
             });
 
+            Keyboard.dismiss();
+
             socket.emit("chat", {"interlocutor": this.props.navigation.state.params.id, "message": messageObject});
-
-            const response = await ChatController.postMessage(this.props.navigation.state.params.id, store.getState().user.id, messageObject);
-
+            ChatController.postMessage(this.props.navigation.state.params.id, store.getState().user.id, messageObject);
         }catch (e) {
             console.log(e);
         }
@@ -95,6 +99,7 @@ export default class Conversation extends Component<Props> {
                         <ScrollView style={styles.messagesList} ref="scrollView"
                                     onContentSizeChange={(width,height) => this.refs.scrollView.scrollTo({y:height})}>
                             <FlatList data={this.state.messages}
+                                      extraData={this.state.load}
                                       renderItem={chat => <Message chat={chat.item}
                                                                    chatPhoto={this.state.photo}
                                                                    chatId={this.state.id}
@@ -105,7 +110,7 @@ export default class Conversation extends Component<Props> {
                     </View>
 
                     <KeyboardAvoidingView behavior="padding" style={styles.inputContainer}>
-                        <TextInput style={styles.input} multiline={true} placeholder="Type a message" onChangeText={(text) => this.setState({text: text})}/>
+                        <TextInput style={styles.input} multiline={true} placeholder="Type a message" onChangeText={(text) => this.setState({text: text})} value={this.state.text}/>
                         <Button title="Send" onPress={this.submit} style={styles.sendButton}/>
                     </KeyboardAvoidingView>
                 </View>
