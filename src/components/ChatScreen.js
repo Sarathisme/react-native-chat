@@ -1,12 +1,23 @@
 import React, {Component} from 'react';
-import {View, Text, StatusBar} from 'react-native';
-import {FlatList, ScrollView} from 'react-native';
+import {
+    View,
+    Text,
+    StatusBar,
+    FlatList,
+    ScrollView,
+    Image,
+    TouchableNativeFeedback,
+    ToastAndroid
+} from 'react-native';
+import {Header} from "react-native-elements";
+import {GoogleSignin} from "react-native-google-signin";
 import User from './User';
 import FAB from 'react-native-fab'
 import styles from '../stylesheets/ChatScreen';
 import store from '../reducers/Store';
 import ChatController from '../controllers/ChatController';
 import NewUser from "./NewUser";
+import signOut from '../../sign-out.png';
 
 export default class ChatScreen extends Component {
     constructor(props) {
@@ -20,33 +31,63 @@ export default class ChatScreen extends Component {
         };
 
         this.newUser = this.newUser.bind(this);
+        this.logout = this.logout.bind(this);
+        this.getData = this.getData.bind(this);
     }
 
-    async componentWillMount(): void {
-        let chats;
+    componentWillMount(): void {
+        this.getData();
+    }
+
+    componentWillUpdate(nextProps: Readonly<P>, nextState: Readonly<S>, nextContext: any): void {
+        console.log("Update!");
+    }
+
+    async getData() {
         try {
-            chats = await ChatController.getDataItems(store.getState().user.id);
+            let chats = await ChatController.getDataItems(store.getState().user.id);
+            store.dispatch({type: 'FETCH_DATA_ITEMS', chats: chats});
+            this.setState({'load': true});
         } catch (e) {
             console.log(e);
         }
-        store.dispatch({type: 'FETCH_DATA_ITEMS', chats: chats});
-        this.setState({'load': true});
     }
-
-    static navigationOptions = {
-        headerStyle: {
-            backgroundColor: 'steelblue',
-            textColor: 'white'
-        },
-        headerTitle: <Text style={styles.title}>Chat</Text>,
-    };
 
     newUser() {
         this.props.navigation.navigate("NewUser");
     }
 
+    componentDidMount(): void {
+        this.willFocusListener = this.props.navigation.addListener(
+            'willFocus',
+            () => {
+                this.getData()
+            }
+        )
+    }
+
+    componentWillUnmount(): void {
+        this.willFocusListener.remove();
+    }
+
+    async logout() {
+        try {
+            await GoogleSignin.signOut();
+            store.dispatch({type: 'SIGN_OUT_USER'});
+            ToastAndroid.show("Successfully signed out!", ToastAndroid.SHORT);
+            this.props.navigation.navigate("HomeScreen", {});
+        }catch (e) {
+            console.log(e);
+        }
+    }
+
     render() {
         return <View style={styles.main}>
+            <Header containerStyle={styles.header}
+                    leftComponent={<View style={styles.nameContainer}><Text style={styles.name}>Chat</Text></View>}
+                    rightComponent={<View style={styles.imageContainer}><TouchableNativeFeedback onPress={this.logout}><Image style={styles.image} source={signOut}/></TouchableNativeFeedback></View>}
+            />
+
             <StatusBar backgroundColor="steelblue" barStyle="light-content" />
             <ScrollView style={styles.scrollView}>
                 <FlatList data={store.getState().data.chats}
@@ -60,7 +101,7 @@ export default class ChatScreen extends Component {
                           keyExtractor={chat => {
                               return chat.user_id;
                           }
-                      }
+                          }
                 />
             </ScrollView>
             <FAB buttonColor="red"

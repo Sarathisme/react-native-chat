@@ -3,7 +3,8 @@ import {StyleSheet} from 'react-native';
 const ConversationStyles = StyleSheet.create({
 
     container: {
-        flexDirection: 'column'
+        flexDirection: 'column',
+        flex: 1,
     },
 
     headerContainer: {
@@ -14,7 +15,8 @@ const ConversationStyles = StyleSheet.create({
 
     contentContainer: {
         flexDirection: 'column',
-        height: '100%',
+        flex: 1,
+        justifyContent: 'flex-end'
     },
 
     nameContainer: {
@@ -24,32 +26,41 @@ const ConversationStyles = StyleSheet.create({
     },
 
     messagesContainer: {
-        flex: 3.6,
         flexDirection: 'row',
         alignItems: 'flex-end',
-    },
-
-    inputContainer: {
-        flex: 1,
-        flexDirection: 'row',
-        padding: 0,
-        backgroundColor: '#eaeaea',
+        marginBottom: 48
     },
 
     messagesList: {
         flex: 1,
     },
 
-    input: {
-        flex: 1,
+    inputContainer: {
+        position: 'absolute',
+        flexDirection: 'row',
+        backgroundColor: '#eaeaea',
+        bottom: 0
+    },
+
+    inputFieldContainer: {
+        flex: 4,
+        height: 48
+    },
+
+    inputField: {
         color: 'black',
-        height: 300,
         textAlignVertical: 'top',
+    },
+
+    buttonContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        marginRight: 4
     },
 
     sendButton: {
         alignItems: 'center',
-        textAlign:'center'
+        textAlign: 'center'
     },
 
     profile: {
@@ -61,9 +72,7 @@ const ConversationStyles = StyleSheet.create({
     },
 
     name: {
-        fontWeight: 'bold',
         color: 'white',
-        textAlign: 'center'
     },
 
     email: {

@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {View, Text} from 'react-native';
+import {View, Text, ScrollView} from 'react-native';
 import {Input, ListItem} from 'react-native-elements';
 import styles from '../stylesheets/NewUser';
 import store from '../reducers/Store';
@@ -40,7 +40,7 @@ export default class NewUser extends Component<Props> {
         return(
             <View>
                 <Input style={styles.input} placeholder="Enter a username" shake={true} onChangeText={this.getUsers}/>
-                <View>
+                <ScrollView>
                     {this.state.users.map((user, i) =>
                         <ListItem
                             key={i}
@@ -50,7 +50,7 @@ export default class NewUser extends Component<Props> {
                             onPress={() => this.chatWithUser(user)}
                         />
                     )}
-                </View>
+                </ScrollView>
             </View>
         )
     }

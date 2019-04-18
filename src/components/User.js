@@ -25,7 +25,6 @@ export default class User extends Component<Props> {
     render() {
         return (
             <View>
-
                 <StatusBar backgroundColor="steelblue" barStyle="light-content" />
                 <TouchableNativeFeedback onPress={() => this.onPress(this.props.name, this.props.photo, this.props.id)}>
                     <View style={styles.container}>

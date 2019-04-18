@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
-import {Text, View, Image, StatusBar, TextInput, KeyboardAvoidingView, ScrollView, FlatList, Button, Keyboard} from "react-native";
+import { human } from 'react-native-typography'
+import {Text, View, Image, StatusBar, TextInput, KeyboardAvoidingView, ScrollView, FlatList, Button, BackHandler} from "react-native";
 import Message from '../components/Message';
 import styles from '../stylesheets/Conversation';
 import {Header} from "react-native-elements";
@@ -88,7 +89,7 @@ export default class Conversation extends Component<Props> {
                     containerStyle={styles.headerContainer}
                     leftComponent={<Image style={styles.profile} source={{uri: this.props.navigation.state.params.photo}}/>}
                     centerComponent={<View style={styles.nameContainer}>
-                        <Text style={styles.name}>{this.props.navigation.state.params.name}</Text>
+                        <Text style={[human.title3, styles.name]}>{this.props.navigation.state.params.name}</Text>
                     </View>}
                 />
 
@@ -108,8 +109,12 @@ export default class Conversation extends Component<Props> {
                     </View>
 
                     <KeyboardAvoidingView behavior="padding" style={styles.inputContainer}>
-                        <TextInput style={styles.input} multiline={true} placeholder="Type a message" onChangeText={(text) => this.setState({text: text})} value={this.state.text}/>
-                        <Button title="Send" onPress={this.submit} style={styles.sendButton}/>
+                        <View style={styles.inputFieldContainer}>
+                        <TextInput style={styles.inputField} placeholder="Type a message" onChangeText={(text) => this.setState({text: text})} value={this.state.text}/>
+                        </View>
+                        <View style={styles.buttonContainer}>
+                            <Button title="Send" onPress={this.submit} style={styles.sendButton}/>
+                        </View>
                     </KeyboardAvoidingView>
                 </View>
             </View>

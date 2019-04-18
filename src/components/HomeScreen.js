@@ -25,7 +25,7 @@ export default class HomeScreen extends Component<Props> {
         this.props.navigation.navigate("ChatScreen");
     };
 
-    render() {
+    getSpinValue() {
         let spinValue = new Animated.Value(0);
 
         Animated.timing(
@@ -37,30 +37,36 @@ export default class HomeScreen extends Component<Props> {
             }
         ).start();
 
-        const spin = spinValue.interpolate({
+        return spinValue.interpolate({
             inputRange: [0, 1],
             outputRange: ['0deg', '360deg']
         });
+    }
 
-        return (
-            <View style={styles.container}>
-                <StatusBar backgroundColor="steelblue" barStyle="light-content" />
-                <View style={styles.logoContainer}>
-                    <Animated.Image style={{
-                        maxWidth: 200,
-                        maxHeight: 200,
-                        transform: [{rotate: spin}]
-                    }} source={logo}/>
+    render() {
+        try {
+            return (
+                <View style={styles.container}>
+                    <StatusBar backgroundColor="steelblue" barStyle="light-content"/>
+                    <View style={styles.logoContainer}>
+                        <Animated.Image style={{
+                            maxWidth: 200,
+                            maxHeight: 200,
+                            transform: [{rotate: this.getSpinValue()}]
+                        }} source={logo}/>
+                    </View>
+                    <View style={styles.buttonContainer}>
+                        <GoogleSigninButton
+                            style={styles.google}
+                            size={GoogleSigninButton.Size.Standard}
+                            color={GoogleSigninButton.Color.Light}
+                            onPress={this.signIn}/>
+                    </View>
                 </View>
-                <View style={styles.buttonContainer}>
-                    <GoogleSigninButton
-                        style={styles.google}
-                        size={GoogleSigninButton.Size.Standard}
-                        color={GoogleSigninButton.Color.Light}
-                        onPress={this.signIn} />
-                </View>
-            </View>
-        );
+            );
+        }catch (e) {
+            console.log(e);
+        }
     }
 }
 

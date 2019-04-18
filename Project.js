@@ -7,7 +7,7 @@ import NewUser from "./src/components/NewUser";
 
 const Project= createStackNavigator({
     HomeScreen: {screen: HomeScreen, navigationOptions:{header: null}},
-    ChatScreen: {screen: ChatScreen},
+    ChatScreen: {screen: ChatScreen, navigationOptions: {header: null}},
     Conversation: {screen: Conversation, navigationOptions: {header: null}},
     NewUser: {screen: NewUser}
 },{
