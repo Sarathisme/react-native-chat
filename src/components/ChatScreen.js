@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
 import {View, Text, StatusBar} from 'react-native';
-import {Image, FlatList, ScrollView} from 'react-native';
-import plus from '../../plus.png';
+import {FlatList, ScrollView} from 'react-native';
 import User from './User';
 import FAB from 'react-native-fab'
 import styles from '../stylesheets/ChatScreen';
@@ -20,7 +19,7 @@ export default class ChatScreen extends Component {
             'visible': false
         };
 
-        this.dismissDialog = this.dismissDialog.bind(this);
+        this.newUser = this.newUser.bind(this);
     }
 
     async componentWillMount(): void {
@@ -42,15 +41,13 @@ export default class ChatScreen extends Component {
         headerTitle: <Text style={styles.title}>Chat</Text>,
     };
 
-    dismissDialog() {
-        this.setState({visible: false});
+    newUser() {
+        this.props.navigation.navigate("NewUser");
     }
 
     render() {
         return <View style={styles.main}>
-            <NewUser visible={this.state.visible} dismiss={this.dismissDialog}/>
             <StatusBar backgroundColor="steelblue" barStyle="light-content" />
-
             <ScrollView style={styles.scrollView}>
                 <FlatList data={store.getState().data.chats}
                           renderItem={chat => <User id={chat.item.user_id}
@@ -68,7 +65,7 @@ export default class ChatScreen extends Component {
             </ScrollView>
             <FAB buttonColor="red"
                  iconTextColor="#FFFFFF"
-                 onClickAction={() => {this.setState({visible: true})}}
+                 onClickAction={this.newUser}
                  visible={true}
             />
         </View>;
