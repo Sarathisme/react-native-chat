@@ -18,12 +18,23 @@ export default class Conversation extends Component<Props> {
             name: this.props.navigation.state.params.name,
             photo: this.props.navigation.state.params.photo,
             text: null,
-            load: false
+            load: false,
+            typing: false
         };
 
         this.getMessages = this.getMessages.bind(this);
         this.submit = this.submit.bind(this);
         this.subscribeToMessage = this.subscribeToMessage.bind(this);
+        this.subscribeToTyping = this.subscribeToTyping.bind(this);
+    }
+
+
+    subscribeToTyping() {
+        socket.on(store.getState().user.id, data => {
+            this.setState({
+                typing: true
+            });
+        });
     }
 
     subscribeToMessage() {
@@ -55,7 +66,8 @@ export default class Conversation extends Component<Props> {
             this.setState({
                 'messages': messages,
                 'load': !this.state.load,
-                'text': ''
+                'text': '',
+                'typing': false
             });
 
             socket.emit("chat", {"interlocutor": this.props.navigation.state.params.id, "message": messageObject});
@@ -94,7 +106,7 @@ export default class Conversation extends Component<Props> {
                 />
 
                 <View style={styles.contentContainer}>
-                    <View style={styles.messagesContainer}>
+                    <View style={[styles.messagesContainer, this.state.typing? {marginBottom: 0} : {marginBottom: 48}]}>
                         <ScrollView style={styles.messagesList} ref="scrollView"
                                     onContentSizeChange={(width,height) => this.refs.scrollView.scrollTo({y:height})}>
                             <FlatList data={this.state.messages}
@@ -106,6 +118,10 @@ export default class Conversation extends Component<Props> {
                                       }
                             />
                         </ScrollView>
+                    </View>
+
+                    <View style={[styles.typingContainer, !this.state.typing ? { display: "none" } : null]}>
+                        <Text style={styles.typing}>Typing......</Text>
                     </View>
 
                     <KeyboardAvoidingView behavior="padding" style={styles.inputContainer}>

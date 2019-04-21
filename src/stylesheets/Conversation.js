@@ -28,7 +28,6 @@ const ConversationStyles = StyleSheet.create({
     messagesContainer: {
         flexDirection: 'row',
         alignItems: 'flex-end',
-        marginBottom: 48
     },
 
     messagesList: {
@@ -61,6 +60,15 @@ const ConversationStyles = StyleSheet.create({
     sendButton: {
         alignItems: 'center',
         textAlign: 'center'
+    },
+
+    typingContainer: {
+        marginBottom: 50,
+        marginLeft: 8
+    },
+
+    typing: {
+        fontWeight: 'bold'
     },
 
     profile: {
