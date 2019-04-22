@@ -49,12 +49,14 @@ export default class Conversation extends Component<Props> {
 
     subscribeToMessage() {
         socket.on(store.getState().user.id, data => {
-           const messages = this.state.messages;
-           messages.push(data);
-           this.setState({
-               messages: messages,
-               load: !this.state.load
-           });
+            if(this.props.navigation.state.params.id === data.id) {
+                const messages = this.state.messages;
+                messages.push(data);
+                this.setState({
+                    messages: messages,
+                    load: !this.state.load
+                });
+            }
         });
     }
 
@@ -135,9 +137,9 @@ export default class Conversation extends Component<Props> {
                         <Text style={styles.typing}>Typing......</Text>
                     </View>
 
-                    <KeyboardAvoidingView behavior="padding" style={styles.inputContainer}>
+                    <KeyboardAvoidingView style={styles.inputContainer}>
                         <View style={styles.inputFieldContainer}>
-                        <TextInput style={styles.inputField} placeholder="Type a message" onChangeText={(text) => this.setState({text: text})} value={this.state.text}/>
+                            <TextInput style={styles.inputField} placeholder="Type a message" onChangeText={(text) => this.setState({text: text})} value={this.state.text}/>
                         </View>
                         <View style={styles.buttonContainer}>
                             <Button title="Send" onPress={this.submit} style={styles.sendButton}/>
