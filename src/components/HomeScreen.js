@@ -7,8 +7,8 @@
  */
 
 import React, {Component} from 'react';
-import {View, Animated, Easing, StatusBar} from 'react-native';
-import { GoogleSigninButton } from 'react-native-google-signin';
+import {ActivityIndicator, Animated, Easing, StatusBar, ToastAndroid, View} from 'react-native';
+import {GoogleSigninButton} from 'react-native-google-signin';
 
 import store from '../reducers/Store';
 import styles from '../stylesheets/HomeScreen';
@@ -19,11 +19,31 @@ import AuthController from '../controllers/AuthController';
 type Props = {};
 
 export default class HomeScreen extends Component<Props> {
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            loading: false
+        }
+    }
+
     signIn = async () => {
+        this.progressDialog(true);
         const user = await AuthController.signIn();
-        store.dispatch({type: 'SIGN_IN_USER', user: user});
+        this.progressDialog(false);
+        try {
+            store.dispatch({type: 'SIGN_IN_USER', user: user});
+        }catch (e) {
+            ToastAndroid.show("Cannot sign in! Please try again later.", ToastAndroid.LONG);
+        }
         this.props.navigation.navigate("ChatScreen");
     };
+
+    progressDialog(visible) {
+        this.setState({
+            loading: visible
+        })
+    }
 
     getSpinValue() {
         let spinValue = new Animated.Value(0);
@@ -44,6 +64,8 @@ export default class HomeScreen extends Component<Props> {
     }
 
     render() {
+        const isLoading = this.state.loading;
+
         try {
             return (
                 <View style={styles.container}>
@@ -60,8 +82,16 @@ export default class HomeScreen extends Component<Props> {
                             style={styles.google}
                             size={GoogleSigninButton.Size.Standard}
                             color={GoogleSigninButton.Color.Light}
-                            onPress={this.signIn}/>
+                            onPress={this.signIn}
+                            disabled={this.state.loading}/>
                     </View>
+
+                    {isLoading && (
+                        <ActivityIndicator
+                            style={styles.loadingContainer}
+                            size="large"
+                        />
+                    )}
                 </View>
             );
         }catch (e) {

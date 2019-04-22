@@ -1,6 +1,16 @@
 import React, {Component} from 'react';
-import { human } from 'react-native-typography'
-import {Text, View, Image, StatusBar, TextInput, KeyboardAvoidingView, ScrollView, FlatList, Button, BackHandler} from "react-native";
+import {human} from 'react-native-typography'
+import {
+    Button,
+    FlatList,
+    Image,
+    KeyboardAvoidingView,
+    ScrollView,
+    StatusBar,
+    Text,
+    TextInput,
+    View
+} from "react-native";
 import Message from '../components/Message';
 import styles from '../stylesheets/Conversation';
 import {Header} from "react-native-elements";
@@ -50,6 +60,7 @@ export default class Conversation extends Component<Props> {
 
     componentDidMount(): void {
         this.subscribeToMessage();
+        this.subscribeToTyping();
     }
 
     async submit() {

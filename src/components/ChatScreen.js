@@ -1,14 +1,5 @@
 import React, {Component} from 'react';
-import {
-    View,
-    Text,
-    StatusBar,
-    FlatList,
-    ScrollView,
-    Image,
-    TouchableNativeFeedback,
-    ToastAndroid
-} from 'react-native';
+import {FlatList, Image, ScrollView, StatusBar, Text, ToastAndroid, TouchableNativeFeedback, View} from 'react-native';
 import {Header} from "react-native-elements";
 import {GoogleSignin} from "react-native-google-signin";
 import User from './User';
@@ -18,6 +9,7 @@ import store from '../reducers/Store';
 import ChatController from '../controllers/ChatController';
 import NewUser from "./NewUser";
 import signOut from '../../sign-out.png';
+import socket from '../socket/Socket';
 
 export default class ChatScreen extends Component {
     constructor(props) {
@@ -35,12 +27,15 @@ export default class ChatScreen extends Component {
         this.getData = this.getData.bind(this);
     }
 
-    componentWillMount(): void {
-        this.getData();
+    subscribeToTyping() {
+        socket.on(store.getState().user.id, data => {
+            this.getData();
+        });
     }
 
-    componentWillUpdate(nextProps: Readonly<P>, nextState: Readonly<S>, nextContext: any): void {
-        console.log("Update!");
+    componentWillMount(): void {
+        this.getData();
+        this.subscribeToTyping();
     }
 
     async getData() {

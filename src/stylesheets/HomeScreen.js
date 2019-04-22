@@ -20,6 +20,12 @@ const HomeScreenStyles = StyleSheet.create({
         margin: 8
     },
 
+    loadingContainer: {
+        position: 'absolute',
+        bottom: '20%',
+        height: 80
+    },
+
     google: {
         width: 192,
         height: 48
